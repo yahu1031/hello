@@ -1,16 +1,10 @@
-import 'package:beirut/ProfileMode.dart';
-import 'package:beirut/Screens/login_screen.dart';
-import 'package:beirut/Screens/profile_page.dart';
-import 'package:beirut/Screens/search_users.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../constants.dart';
 import 'dart:io';
-import 'package:beirut/styles.dart';
 
 class Profile extends StatefulWidget {
   static const id = '/profile';
@@ -84,9 +78,9 @@ class _ProfileState extends State<Profile> {
           title: Container(
             margin: EdgeInsets.only(top: 20),
             child: Text(
-              'Submitted Profiles',
+              'All Profiles',
               style: GoogleFonts.quicksand(
-                  fontSize: 35.0,
+                  fontSize: 28.0,
                   color: Color(0xFF3F51B5),
                   fontWeight: FontWeight.w200),
             ),
@@ -278,77 +272,74 @@ class _ProfileState extends State<Profile> {
                                                 SizedBox(
                                                   height: 30,
                                                 ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: <Widget>[
-                                                    Icon(Icons.delete,
-                                                        color: Colors.red),
-                                                    GestureDetector(
-                                                      onTap: () async {
-                                                        BotToast.showText(
-                                                            contentColor:
-                                                                Colors.black54,
-                                                            text:
-                                                                "LOADING ... ",
-                                                            textStyle: GoogleFonts
-                                                                .quicksand(
-                                                                    fontSize:
-                                                                        20,
-                                                                    color: Colors
-                                                                        .white));
-                                                        await Firestore.instance
-                                                            .runTransaction(
-                                                                (Transaction
-                                                                    myTransaction) async {
-                                                          await myTransaction
-                                                              .delete(snapshot
-                                                                  .data
-                                                                  .documents[
-                                                                      index]
-                                                                  .reference);
-                                                        });
+                                                FlatButton(
+                                                  color: Colors.transparent,
+                                                  splashColor:
+                                                      Colors.transparent,
+                                                  onPressed: () async {
+                                                    BotToast.showText(
+                                                        contentColor:
+                                                            Colors.black54,
+                                                        text: "LOADING ... ",
+                                                        textStyle: GoogleFonts
+                                                            .quicksand(
+                                                                fontSize: 20,
+                                                                color: Colors
+                                                                    .white));
+                                                    await Firestore.instance
+                                                        .runTransaction((Transaction
+                                                            myTransaction) async {
+                                                      await myTransaction
+                                                          .delete(snapshot
+                                                              .data
+                                                              .documents[index]
+                                                              .reference);
+                                                    });
 
-                                                        Firestore.instance
-                                                            .collection(
-                                                                'User Data')
-                                                            .where("name",
-                                                                isEqualTo: snapshot
-                                                                            .data
-                                                                            .documents[
-                                                                        index]
-                                                                    ['name'])
-                                                            .where("age",
-                                                                isEqualTo: snapshot
-                                                                        .data
-                                                                        .documents[
-                                                                    index]['age'])
-                                                            .getDocuments()
-                                                            .then((snapshot) {
-                                                          snapshot.documents
-                                                              .first.reference
-                                                              .delete();
-                                                          BotToast.showText(
-                                                              contentColor: Colors
-                                                                  .greenAccent,
-                                                              text: "Done ! ",
-                                                              textStyle: GoogleFonts
-                                                                  .quicksand(
-                                                                      fontSize:
-                                                                          20,
-                                                                      color: Colors
-                                                                          .white));
-                                                        });
-                                                      },
-                                                      child: Text(
+                                                    Firestore.instance
+                                                        .collection('User Data')
+                                                        .where("name",
+                                                            isEqualTo: snapshot
+                                                                    .data
+                                                                    .documents[
+                                                                index]['name'])
+                                                        .where("age",
+                                                            isEqualTo: snapshot
+                                                                    .data
+                                                                    .documents[
+                                                                index]['age'])
+                                                        .getDocuments()
+                                                        .then((snapshot) {
+                                                      snapshot.documents.first
+                                                          .reference
+                                                          .delete();
+                                                      BotToast.showText(
+                                                          contentColor: Colors
+                                                              .greenAccent,
+                                                          text: "Done ! ",
+                                                          textStyle: GoogleFonts
+                                                              .quicksand(
+                                                                  fontSize: 20,
+                                                                  color: Colors
+                                                                      .white));
+                                                    });
+                                                  },
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: <Widget>[
+                                                      Icon(Icons.delete,
+                                                          color: Colors.red),
+                                                      Text(
                                                         'DELETE',
                                                         style: GoogleFonts
                                                             .quicksand(
                                                                 color:
                                                                     Colors.red),
-                                                      ),
-                                                    )
-                                                  ],
+                                                      )
+                                                    ],
+                                                  ),
                                                 )
                                               ],
                                             ),

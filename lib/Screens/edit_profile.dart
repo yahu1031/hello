@@ -65,21 +65,29 @@ class _EditProfileState extends State<EditProfile> {
         'phoneNumber': phoneNumber,
         'message': message,
         'address': address,
-      }).then((_) async {
-        fireStoreInstance.collection("User Data").add({
-          'status': status.toString(),
-          'profile_pic_url': await saveImageOnFirebaseStorage(
-              name, age, profileImg.path, profileImg),
-          'name': name,
-          'gender': gender,
-          'age': age,
-          'phoneNumber': phoneNumber,
-          'message': message,
-          'address': address,
-          'quardianName': guardianName,
-        }).then((_) {
-          print("success!");
-        });
+      });
+      BotToast.showText(
+          contentColor: Colors.greenAccent,
+          text: "LOADING ...",
+          textStyle: GoogleFonts.quicksand(fontSize: 20, color: Colors.white));
+      fireStoreInstance.collection("User Data").add({
+        'status': status.toString(),
+        'profile_pic_url': await saveImageOnFirebaseStorage(
+            name, age, profileImg.path, profileImg),
+        'name': name,
+        'gender': gender,
+        'age': age,
+        'phoneNumber': phoneNumber,
+        'message': message,
+        'address': address,
+        'quardianName': guardianName,
+      }).then((_) {
+        Navigator.pushNamed(context, Bar.id);
+        BotToast.showText(
+            contentColor: Colors.grey,
+            text: "DONE !",
+            textStyle:
+                GoogleFonts.quicksand(fontSize: 20, color: Colors.white));
       });
     });
   }
@@ -138,12 +146,13 @@ class _EditProfileState extends State<EditProfile> {
         },
         cursorColor: Color(0xFF3F51B5),
         style: GoogleFonts.cairo(fontSize: 15, color: Colors.black54),
-        keyboardType: (indicator == age || indicator == phoneNumber)
-            ? TextInputType.number
-            : TextInputType.text,
-        inputFormatters: (indicator == age || indicator == phoneNumber)
-            ? <TextInputFormatter>[WhitelistingTextInputFormatter.digitsOnly]
-            : null,
+        // keyboardType:
+        // (indicator != age || indicator != phoneNumber)
+        //  TextInputType.text,
+        // : TextInputType.number,
+        // inputFormatters: (indicator != age || indicator != phoneNumber)
+        //     ? null
+        //     : <TextInputFormatter>[WhitelistingTextInputFormatter.digitsOnly],
         decoration: InputDecoration(
             border: InputBorder.none,
             hintText: hintText,
@@ -186,7 +195,7 @@ class _EditProfileState extends State<EditProfile> {
               color: Color(0xFF3F51B5),
             ),
             onPressed: () {
-              Navigator.pushNamed(context, Bar.id);
+              Navigator.pop(context, Bar.id);
             },
           ),
         ),
@@ -231,15 +240,26 @@ class _EditProfileState extends State<EditProfile> {
                   Container(
                     child: ToggleSwitch(
                       minHeight: 40,
-                      minWidth: 90,
+                      minWidth: 150,
                       cornerRadius: 50,
-                      initialLabelIndex: status == 'Safe' ? 1 : 0,
-                      activeBgColor:
-                          status == 'Safe' ? Colors.green : Colors.red,
+                      initialLabelIndex: status == 'Safe'
+                          ? 1
+                          : status == 'In hospital' ? 0 : 2,
+                      activeBgColor: status == 'Safe'
+                          ? Colors.green
+                          : status == 'In hospital'
+                              ? Colors.red
+                              : status == 'In hospital'
+                                  ? Colors.red.shade800
+                                  : Colors.red.shade800,
                       activeFgColor: Colors.white,
                       inactiveBgColor: Colors.white,
                       inactiveFgColor: Colors.grey.shade600,
-                      labels: ['Emergency', 'Safe'],
+                      labels: [
+                        'In hospital',
+                        'Safe',
+                        'Injured/confirmed deseased'
+                      ],
                       onToggle: (index) {
                         if (index == 1) {
                           setState(() {
@@ -247,7 +267,11 @@ class _EditProfileState extends State<EditProfile> {
                           });
                         } else if (index == 0) {
                           setState(() {
-                            status = 'Emergency';
+                            status = 'In hospital';
+                          });
+                        } else if (index == 2) {
+                          setState(() {
+                            status = 'Injured/confirmed deseased';
                           });
                         }
                       },
@@ -328,20 +352,20 @@ class _EditProfileState extends State<EditProfile> {
                     SizedBox(
                       height: 10,
                     ),
-                    textField('At least valid phone number',
-                        Icons.phone_android, phoneNumber),
+                    textField(
+                        'Valid phone number', Icons.phone_android, phoneNumber),
                     SizedBox(
                       height: 10,
                     ),
                     Text(
-                      'First Seen Adress',
+                      'Last Seen Address',
                       style: TextStyle(
                           color: adressError ? Colors.red : Color(0xFF3F51B5)),
                     ),
                     SizedBox(
                       height: 10,
                     ),
-                    textField('Enter Adress', Icons.location_on, address),
+                    textField('Enter Address', Icons.location_on, address),
                     SizedBox(
                       height: 10,
                     ),
@@ -437,12 +461,6 @@ class _EditProfileState extends State<EditProfile> {
                           textStyle: GoogleFonts.quicksand(
                               fontSize: 20, color: Colors.white));
                       await _onPressed();
-                      Navigator.pushNamed(context, Bar.id);
-                      BotToast.showText(
-                          contentColor: Colors.grey,
-                          text: "DONE !",
-                          textStyle: GoogleFonts.quicksand(
-                              fontSize: 20, color: Colors.white));
                     },
                     child: Text(
                       'SAVE',

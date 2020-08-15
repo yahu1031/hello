@@ -29,7 +29,6 @@ class ProfileModel {
       name: data['name'],
       phoneNumber: data['phoneNumber'],
       status: data['status'],
-//      instagram: data['instagram'],
       message: data['message'],
       address: data['address'],
       gender: data['gender'],

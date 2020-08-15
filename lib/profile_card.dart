@@ -1,11 +1,10 @@
 import 'package:beirut/ProfileMode.dart';
-import 'package:beirut/styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
-class ProfileCard extends StatelessWidget {
+class ProfileCard extends StatefulWidget {
   ProfileCard(
       {@required this.profileName,
       this.profileGender,
@@ -25,6 +24,12 @@ class ProfileCard extends StatelessWidget {
   final String profileNumber;
   final bool showDetails;
   final String profileAddress;
+
+  @override
+  _ProfileCardState createState() => _ProfileCardState();
+}
+
+class _ProfileCardState extends State<ProfileCard> {
   ProfileModel profileModel;
 
   @override
@@ -41,7 +46,7 @@ class ProfileCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       CircleAvatar(
-                        backgroundImage: NetworkImage(profilePicture),
+                        backgroundImage: NetworkImage(widget.profilePicture),
                         radius: 40.0,
                       ),
                       SizedBox(
@@ -51,14 +56,14 @@ class ProfileCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            '$profileName',
+                            '${widget.profileName}',
                             style: GoogleFonts.quicksand(
                                 color: Colors.black87,
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            '$profileGender',
+                            '${widget.profileGender}',
                             style: GoogleFonts.quicksand(
                                 color: Colors.black87, fontSize: 18),
                           ),
@@ -68,7 +73,7 @@ class ProfileCard extends StatelessWidget {
                               style: DefaultTextStyle.of(context).style,
                               children: <TextSpan>[
                                 TextSpan(
-                                  text: '$profileAge',
+                                  text: '${widget.profileAge}',
                                   style: GoogleFonts.quicksand(
                                       color: Color(0xFF3F51B5),
                                       fontSize: 15,
@@ -85,7 +90,7 @@ class ProfileCard extends StatelessWidget {
               ),
             ),
             Visibility(
-              visible: showDetails,
+              visible: widget.showDetails,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
@@ -95,9 +100,9 @@ class ProfileCard extends StatelessWidget {
                       style: DefaultTextStyle.of(context).style,
                       children: <TextSpan>[
                         TextSpan(
-                          text: '$profileStatue',
+                          text: '${widget.profileStatue}',
                           style: GoogleFonts.quicksand(
-                              color: profileStatue == 'Safe'
+                              color: widget.profileStatue == 'Safe'
                                   ? Colors.lightGreen
                                   : Colors.redAccent,
                               fontSize: 15,
@@ -112,7 +117,7 @@ class ProfileCard extends StatelessWidget {
                       style: DefaultTextStyle.of(context).style,
                       children: <TextSpan>[
                         TextSpan(
-                          text: '$profileAddress',
+                          text: '${widget.profileAddress}',
                           style: GoogleFonts.quicksand(
                               color: Color(0xFF3F51B5).withOpacity(.5),
                               fontSize: 15,
@@ -128,7 +133,7 @@ class ProfileCard extends StatelessWidget {
                       style: DefaultTextStyle.of(context).style,
                       children: <TextSpan>[
                         TextSpan(
-                          text: '\n$profileMsg',
+                          text: '\n${widget.profileMsg}',
                           style: GoogleFonts.quicksand(
                               fontSize: 15, fontWeight: FontWeight.bold),
                         ),
@@ -146,7 +151,7 @@ class ProfileCard extends StatelessWidget {
                             color: Colors.greenAccent, size: 30),
                         onPressed: () {
                           UrlLauncher.launch(
-                              'tel:+961 ${profileNumber.toString()}');
+                              'tel:+961 ${widget.profileNumber.toString()}');
                         },
                       ),
                       Text(
@@ -164,7 +169,7 @@ class ProfileCard extends StatelessWidget {
                             color: Colors.black38, size: 30),
                         onPressed: () {
                           UrlLauncher.launch(
-                              'sms:+961 ${profileNumber.toString()}');
+                              'sms:+961 ${widget.profileNumber.toString()}');
                         },
                       ),
                       Text(

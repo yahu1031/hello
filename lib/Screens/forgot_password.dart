@@ -1,12 +1,9 @@
 import 'package:beirut/Components/Responsive/size_config.dart';
 import 'package:beirut/Components/Services/auth_services.dart';
 import 'package:beirut/Components/Services/user.dart';
-import 'package:beirut/Screens/signup_screen.dart';
 import 'package:beirut/Components/Widgets/customTextfield.dart';
 import 'package:beirut/Components/dialogs.dart';
 import 'package:beirut/Components/dialogs.dart' as dialogs;
-import 'package:beirut/Screens/profile.dart';
-import 'package:beirut/Screens/testit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:beirut/constants.dart';
 import 'package:beirut/styles.dart' as style;

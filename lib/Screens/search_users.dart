@@ -1,15 +1,11 @@
-import 'package:beirut/Components/Responsive/sizequery.dart';
 import 'package:beirut/ProfileMode.dart';
 import 'package:beirut/Screens/login_screen.dart';
-import 'package:beirut/Screens/profile.dart';
-import 'package:beirut/Screens/profile_page.dart';
 import 'package:beirut/profile_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 import 'package:beirut/Components/Services/search-timer.dart';
 
 class SearchUserPage extends StatefulWidget {
@@ -59,7 +55,9 @@ class _SearchUserPageState extends State<SearchUserPage> {
   @override
   void initState() {
     createListofProfiles();
-    _filter('');
+    setState(() {
+      _filter('');
+    });
     super.initState();
   }
 
