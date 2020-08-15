@@ -3,7 +3,7 @@ import 'package:beirut/Screens/login_screen.dart';
 import 'package:beirut/Screens/testit.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:beirut/Screens/profile.dart';
+
 
 class Wrapper extends StatelessWidget {
   static const id = '/';

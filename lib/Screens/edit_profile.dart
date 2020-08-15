@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:beirut/Screens/profile.dart';
 import 'package:beirut/Screens/testit.dart';
 import 'package:beirut/styles.dart';
 import 'package:bot_toast/bot_toast.dart';

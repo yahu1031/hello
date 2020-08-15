@@ -1,3 +1,4 @@
+import 'package:beirut/Components/Services/user.dart';
 import 'package:beirut/ProfileMode.dart';
 import 'package:beirut/Screens/edit_profile.dart';
 import 'package:beirut/Screens/profile.dart';
@@ -80,7 +81,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 stream: FirebaseAuth.instance.onAuthStateChanged,
                 builder: (context, result) {
                   if (!result.hasData) {
-                    return Text('');
+                    return Text('No data');
                   }
                   return StreamBuilder<QuerySnapshot>(
                       stream: Firestore.instance
