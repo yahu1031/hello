@@ -24,7 +24,7 @@ class _ProfileState extends State<Profile> {
 
   @override
   void initState() {
-    getCurrentUserEmail();
+    _onPressed();
     super.initState();
   }
 
@@ -43,6 +43,21 @@ class _ProfileState extends State<Profile> {
     final user =
         await _auth.currentUser().then((value) => userEmail = value.email);
     print(userEmail);
+  }
+
+  void _onPressed() async {
+    getCurrentUserEmail();
+    var firebaseUser = await FirebaseAuth.instance.currentUser();
+    fireStoreInstance
+        .collection("Users")
+        .document(userEmail)
+        .collection("settings")
+        .document(firebaseUser.uid)
+        .get()
+        .then((value) {
+      Map data = value.data;
+      name = data['name'];
+    });
   }
 
   /*List <ProfileModel>profilsList = [];
@@ -72,7 +87,7 @@ class _ProfileState extends State<Profile> {
               'Submitted Profiles',
               style: GoogleFonts.quicksand(
                   fontSize: 35.0,
-                  color: Colors.orange,
+                  color: Color(0xFF3F51B5),
                   fontWeight: FontWeight.w200),
             ),
           ),
@@ -80,6 +95,7 @@ class _ProfileState extends State<Profile> {
         body: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Divider(
                 height: 20,
@@ -104,11 +120,11 @@ class _ProfileState extends State<Profile> {
                           if (snapshot.hasError)
                             return new Text('Error: ${snapshot.error}');
                           else if (snapshot.data.documents.length == 0)
-                            return const Center(
+                            return Center(
                               child: Text(
-                                "You haven't posted any profile .",
+                                "You haven't posted any profile . \nSo, Dear user/volunteer click below to add profiles",
                                 style: TextStyle(
-                                    fontSize: 10.0, color: Colors.grey),
+                                    fontSize: 15.0, color: Colors.grey),
                               ),
                             );
                           switch (snapshot.connectionState) {
@@ -120,7 +136,8 @@ class _ProfileState extends State<Profile> {
                               return Center(
                                 child: Text('Create Your Profile',
                                     style: TextStyle(
-                                        fontSize: 30, color: Colors.orange)),
+                                        fontSize: 30,
+                                        color: Color(0xFF3F51B5))),
                               );
                             default:
                               return ListView.separated(

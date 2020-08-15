@@ -11,7 +11,9 @@ const String kFillDetails = 'Fill in the details';
 const String kNoAccount = 'Don\'t have account ? ';
 const String kCreateOne = ' Create One';
 const String kCreateAcc = 'Create Account';
+const String kForgotPass = 'Opps Lost Account?';
 const String kLogin = 'Login';
+const String kFPLogin = 'Came here by mistake ?';
 const String kPassword = 'Password';
 const String kMail = 'Email';
 const String kSignup = 'Signup';
@@ -30,3 +32,6 @@ const String kPasswordTooShortExplainString =
 const String kCredMismatchString =
     "Your credentials did not match. Please try with Correct credentials.";
 const String kForgotPassword = 'Forgot Password?';
+const String kSent = 'Mail Sent';
+const String kSentContent =
+    'We have sen the rest password link to your account';

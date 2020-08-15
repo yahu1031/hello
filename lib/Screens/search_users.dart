@@ -34,7 +34,7 @@ class _SearchUserPageState extends State<SearchUserPage> {
   List<ProfileModel> newList = [];
   List<ProfileModel> oldList = [];
 
-  String filteredText = '';
+  bool showText = false;
   void _filter(string) {
     newList = oldList
         .where((u) => (u.name.toLowerCase().contains(string.toLowerCase())))
@@ -56,9 +56,10 @@ class _SearchUserPageState extends State<SearchUserPage> {
   TextEditingController _text = TextEditingController();
   final _debouncer = Debouncer(milliseconds: 500);
   @override
+  @override
   void initState() {
     createListofProfiles();
-
+    _filter('');
     super.initState();
   }
 
@@ -76,7 +77,7 @@ class _SearchUserPageState extends State<SearchUserPage> {
             'Search',
             style: GoogleFonts.quicksand(
                 fontSize: 35.0,
-                color: Colors.orange,
+                color: Color(0xFF3F51B5),
                 fontWeight: FontWeight.w200),
           ),
         ),
@@ -109,10 +110,14 @@ class _SearchUserPageState extends State<SearchUserPage> {
                                   _debouncer.run(() {
                                     setState(() {
                                       _filter(string);
+                                      if (newList.isEmpty)
+                                        showText = true;
+                                      else
+                                        showText = false;
                                     });
                                   });
                                 },
-                                cursorColor: Colors.orange,
+                                cursorColor: Color(0xFF3F51B5),
                                 style: GoogleFonts.cairo(
                                     fontSize: 15, color: Colors.black54),
                                 decoration: InputDecoration(
@@ -125,7 +130,8 @@ class _SearchUserPageState extends State<SearchUserPage> {
                                     contentPadding: EdgeInsets.only(
                                         left: 1, right: 5, bottom: 0, top: 10),
                                     prefixIcon: Icon(Icons.search,
-                                        color: Colors.orange.shade500)),
+                                        color:
+                                            Color(0xFF3F51B5).withOpacity(.5))),
                               ),
                             ),
                             Container(
@@ -143,7 +149,7 @@ class _SearchUserPageState extends State<SearchUserPage> {
                                   padding: EdgeInsets.all(5),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                      color: Colors.orange.shade500,
+                                      color: Color(0xFF3F51B5).withOpacity(.5),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(5.0))),
                                   child: Icon(
@@ -154,6 +160,9 @@ class _SearchUserPageState extends State<SearchUserPage> {
                           ],
                         ),
                       ),
+                      Container(
+                          margin: EdgeInsets.only(top: 50),
+                          child: showText ? Text('User Not Found.') : Center()),
                       Expanded(
                           child: ListView.separated(
                               separatorBuilder: (context, index) {
@@ -197,7 +206,7 @@ class _SearchUserPageState extends State<SearchUserPage> {
                 _showDetails = true;
             });
           },
-          backgroundColor: Colors.orange.shade500,
+          backgroundColor: Color(0xFF3F51B5).withOpacity(.5),
           child: Icon(Icons.info),
         ),
       ),

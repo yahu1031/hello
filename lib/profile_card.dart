@@ -114,7 +114,7 @@ class ProfileCard extends StatelessWidget {
                         TextSpan(
                           text: '$profileAddress',
                           style: GoogleFonts.quicksand(
-                              color: Colors.orange.shade700,
+                              color: Color(0xFF3F51B5).withOpacity(.5),
                               fontSize: 15,
                               fontWeight: FontWeight.bold),
                         ),

@@ -74,10 +74,10 @@ class _BarState extends State<Bar> with SingleTickerProviderStateMixin {
           heroTag: "bt-2",
           isExtended: true,
           elevation: 8,
-          backgroundColor: HexColor('#FFA400'),
+          backgroundColor: HexColor('#3F51B5'),
           child: Icon(
             Icons.add,
-            color: HexColor('#373A36'),
+            color: HexColor('#FFFFFF'),
           ),
           shape: CircleBorder(),
           onPressed: () {
@@ -90,8 +90,8 @@ class _BarState extends State<Bar> with SingleTickerProviderStateMixin {
         icons: iconList,
         backgroundColor: HexColor('#21201e'),
         activeIndex: _bottomNavIndex,
-        activeColor: HexColor('#FFA400'),
-        splashColor: HexColor('#FFA400'),
+        activeColor: HexColor('#3F51B5'),
+        splashColor: HexColor('#3F51B5'),
         inactiveColor: Colors.white,
         notchAndCornersAnimation: animation,
         splashSpeedInMilliseconds: 200,

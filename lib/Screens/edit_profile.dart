@@ -136,7 +136,7 @@ class _EditProfileState extends State<EditProfile> {
             }
           });
         },
-        cursorColor: Colors.orange,
+        cursorColor: Color(0xFF3F51B5),
         style: GoogleFonts.cairo(fontSize: 15, color: Colors.black54),
         keyboardType: (indicator == age || indicator == phoneNumber)
             ? TextInputType.number
@@ -151,7 +151,7 @@ class _EditProfileState extends State<EditProfile> {
             hintStyle: GoogleFonts.cairo(fontSize: 15, color: Colors.grey),
             contentPadding:
                 EdgeInsets.only(left: 1, right: 5, bottom: 0, top: 10),
-            prefixIcon: Icon(icon, color: Colors.orange.shade500)),
+            prefixIcon: Icon(icon, color: Color(0xFF3F51B5))),
       ),
     );
   }
@@ -173,17 +173,17 @@ class _EditProfileState extends State<EditProfile> {
           title: Container(
             margin: EdgeInsets.only(top: 20),
             child: Text(
-              'Place Search',
+              'Create profile',
               style: GoogleFonts.quicksand(
-                  fontSize: 35.0,
-                  color: Colors.orange,
+                  fontSize: 25.0,
+                  color: Color(0xFF3F51B5),
                   fontWeight: FontWeight.w200),
             ),
           ),
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back_ios,
-              color: Colors.orange,
+              color: Color(0xFF3F51B5),
             ),
             onPressed: () {
               Navigator.pushNamed(context, Bar.id);
@@ -205,10 +205,10 @@ class _EditProfileState extends State<EditProfile> {
                         },
                         child: CircleAvatar(
                           radius: 55,
-                          backgroundColor: Colors.orange.shade50,
+                          backgroundColor: Color(0xFF3F51B5).withOpacity(.5),
                           child: Icon(
                             Icons.input,
-                            color: Colors.orange,
+                            color: Color(0xFF3F51B5),
                           ),
                         ),
                       )
@@ -262,7 +262,7 @@ class _EditProfileState extends State<EditProfile> {
                   children: [
                     Text('Name',
                         style: TextStyle(
-                            color: nameError ? Colors.red : Colors.orange)),
+                            color: nameError ? Colors.red : Color(0xFF3F51B5))),
                     SizedBox(
                       height: 10,
                     ),
@@ -321,7 +321,9 @@ class _EditProfileState extends State<EditProfile> {
                     Text(
                       'Enter your phone Number',
                       style: TextStyle(
-                          color: phoneNumberError ? Colors.red : Colors.orange),
+                          color: phoneNumberError
+                              ? Colors.red
+                              : Color(0xFF3F51B5)),
                     ),
                     SizedBox(
                       height: 10,
@@ -334,7 +336,7 @@ class _EditProfileState extends State<EditProfile> {
                     Text(
                       'First Seen Adress',
                       style: TextStyle(
-                          color: adressError ? Colors.red : Colors.orange),
+                          color: adressError ? Colors.red : Color(0xFF3F51B5)),
                     ),
                     SizedBox(
                       height: 10,
@@ -346,7 +348,7 @@ class _EditProfileState extends State<EditProfile> {
                     Text(
                       'Message',
                       style: TextStyle(
-                          color: messageError ? Colors.red : Colors.orange),
+                          color: messageError ? Colors.red : Color(0xFF3F51B5)),
                     ),
                     SizedBox(
                       height: 10,
@@ -363,7 +365,7 @@ class _EditProfileState extends State<EditProfile> {
                         onChanged: (value) {
                           message = value;
                         },
-                        cursorColor: Colors.orange,
+                        cursorColor: Color(0xFF3F51B5),
                         style: GoogleFonts.cairo(
                             fontSize: 15, color: Colors.black54),
                         decoration: InputDecoration(
@@ -386,9 +388,10 @@ class _EditProfileState extends State<EditProfile> {
               Center(
                 child: Container(
                   decoration: BoxDecoration(
-                      color: Colors.orange,
+                      color: Color(0xFF3F51B5),
                       borderRadius: BorderRadius.all(Radius.circular(24)),
-                      border: Border.all(color: Colors.orange.shade50)),
+                      border:
+                          Border.all(color: Color(0xFF3F51B5).withOpacity(.5))),
                   width: 100,
                   height: 35,
                   child: FlatButton(

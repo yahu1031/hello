@@ -3,6 +3,7 @@ import 'package:beirut/Components/Services/auth_services.dart';
 import 'package:beirut/Components/Services/user.dart';
 import 'package:beirut/Components/Services/wrapper.dart';
 import 'package:beirut/Screens/edit_profile.dart';
+import 'package:beirut/Screens/forgot_password.dart';
 import 'package:beirut/Screens/login_screen.dart';
 import 'package:beirut/Screens/profile.dart';
 import 'package:beirut/Screens/signup_screen.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
                   SearchUserPage.id: (context) => SearchUserPage(),
                   ProfilePage.id: (context) => ProfilePage(),
                   Bar.id: (context) => Bar(),
+                  ForgotPassword.id: (context) => ForgotPassword(),
                 },
               ),
             );

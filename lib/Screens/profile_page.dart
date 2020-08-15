@@ -1,9 +1,3 @@
-import 'package:beirut/Components/Services/user.dart';
-import 'package:beirut/ProfileMode.dart';
-import 'package:beirut/Screens/edit_profile.dart';
-import 'package:beirut/Screens/profile.dart';
-import 'package:beirut/Screens/search_users.dart';
-import 'package:beirut/profile_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
           onPressed: () {
             logout();
           },
-          backgroundColor: Colors.orange.shade500,
+          backgroundColor: Color(0xFF3F51B5).withOpacity(.5),
           label: Text('Logout'),
           icon: Icon(Icons.exit_to_app),
         ),
@@ -68,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
             'Profile',
             style: GoogleFonts.quicksand(
                 fontSize: 35.0,
-                color: Colors.orange,
+                color: Color(0xFF3F51B5),
                 fontWeight: FontWeight.w200),
           ),
         ),
@@ -99,9 +93,86 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: CircularProgressIndicator(),
                             );
                           case ConnectionState.none:
-                            return Center();
+                            return Center(child: Text("NONE"));
                           case ConnectionState.active:
-                            return Center();
+                            print(snapshot.data.documents.toString());
+                            return Column(
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 80,
+                                ),
+                                CircleAvatar(
+                                  backgroundColor: Colors.grey.shade300,
+                                  radius: 80,
+                                  child: Image.asset(
+                                    'images/user.png',
+                                    height: 100,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Text(
+                                  snapshot.data.documents[0]['name'],
+                                  style: GoogleFonts.quicksand(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 30),
+                                ),
+                                Text(
+                                  snapshot.data.documents[0]['email'],
+                                  style: GoogleFonts.quicksand(
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 20),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Container(
+                                  margin: EdgeInsets.all(30),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.location_on,
+                                        color: Color(0xFF3F51B5),
+                                        size: 20,
+                                      ),
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      Text(
+                                        snapshot.data.documents[0]['location'],
+                                        style: GoogleFonts.quicksand(
+                                            fontWeight: FontWeight.w300,
+                                            fontSize: 20),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.all(30),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.phone_android,
+                                        color: Color(0xFF3F51B5),
+                                        size: 30,
+                                      ),
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      Text(
+                                        snapshot.data.documents[0]
+                                            ['phoneNumber'],
+                                        style: GoogleFonts.quicksand(
+                                            fontWeight: FontWeight.w300,
+                                            fontSize: 20),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            );
+
                           default:
                             print(snapshot.data.documents.toString());
                             return Column(
@@ -141,7 +212,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     children: <Widget>[
                                       Icon(
                                         Icons.location_on,
-                                        color: Colors.orange,
+                                        color: Color(0xFF3F51B5),
                                         size: 20,
                                       ),
                                       SizedBox(
@@ -162,7 +233,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     children: <Widget>[
                                       Icon(
                                         Icons.phone_android,
-                                        color: Colors.orange,
+                                        color: Color(0xFF3F51B5),
                                         size: 30,
                                       ),
                                       SizedBox(

@@ -1,6 +1,7 @@
 import 'package:beirut/Components/Responsive/size_config.dart';
 import 'package:beirut/Components/Services/auth_services.dart';
 import 'package:beirut/Components/Services/user.dart';
+import 'package:beirut/Screens/forgot_password.dart';
 import 'package:beirut/Screens/signup_screen.dart';
 import 'package:beirut/Components/Widgets/customTextfield.dart';
 import 'package:beirut/Components/dialogs.dart';
@@ -117,6 +118,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 alignment: Alignment(1.0, 0.0),
                                 padding: EdgeInsets.only(top: 15.0, left: 20.0),
                                 child: InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, ForgotPassword.id);
+                                  },
                                   child: Text(
                                     kForgotPassword,
                                     style: GoogleFonts.montserrat(
