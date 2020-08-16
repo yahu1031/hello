@@ -5,13 +5,12 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:beirut/styles.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class EditProfile extends StatefulWidget {
   static const id = '/edit_profile';
@@ -46,7 +45,7 @@ class _EditProfileState extends State<EditProfile> {
     await _auth.currentUser().then((value) => phoneNumber = value.phoneNumber);
   }
 
-  Future _onPressed() async {
+  /* Future _onPressedFirst() async {
     await _auth
         .currentUser()
         .then((value) => userEmail = value.email)
@@ -67,6 +66,11 @@ class _EditProfileState extends State<EditProfile> {
           'message': message,
           'address': address,
         });
+        BotToast.showText(
+            contentColor: Colors.greenAccent,
+            text: "LOADING (20%)...",
+            textStyle:
+                GoogleFonts.quicksand(fontSize: 20, color: Colors.white));
       } catch (e) {
         BotToast.showText(
             contentColor: Colors.redAccent,
@@ -93,6 +97,10 @@ class _EditProfileState extends State<EditProfile> {
         'address': address,
         'quardianName': guardianName,
       });
+      BotToast.showText(
+          contentColor: Colors.greenAccent,
+          text: "LOADING (45%)...",
+          textStyle: GoogleFonts.quicksand(fontSize: 20, color: Colors.white));
     } catch (e) {
       BotToast.showText(
           contentColor: Colors.redAccent,
@@ -101,10 +109,80 @@ class _EditProfileState extends State<EditProfile> {
 
       return null;
     }
-    Navigator.pushNamed(context, Bar.id);
+    /* Navigator.pushNamed(context, Bar.id);
     BotToast.showText(
         contentColor: Colors.grey,
         text: "DONE",
+        textStyle: GoogleFonts.quicksand(fontSize: 20, color: Colors.white));*/
+  }*/
+
+  Future _onPressedSecond() async {
+    try {
+      await FirebaseDatabase.instance
+          .reference()
+          .child("User Data")
+          .push()
+          .set({
+        'status': status.toString(),
+        'profile_pic_url': await saveImageOnFirebaseStorage(
+            name, age, profileImg.path, profileImg),
+        'name': name,
+        'gender': gender,
+        'age': age,
+        'phoneNumber': phoneNumber,
+        'message': message,
+        'address': address,
+      });
+      BotToast.showText(
+          contentColor: Colors.greenAccent,
+          text: "LOADING (50%)...",
+          textStyle: GoogleFonts.quicksand(fontSize: 20, color: Colors.white));
+    } catch (error) {
+      BotToast.showText(
+          contentColor: Colors.redAccent,
+          text: "FAILED !",
+          textStyle: GoogleFonts.quicksand(fontSize: 20, color: Colors.white));
+    }
+    var firebaseUser = await FirebaseAuth.instance.currentUser();
+    await _auth
+        .currentUser()
+        .then((value) => userEmail = value.email)
+        .then((_) async {
+      try {
+        FirebaseDatabase.instance
+            .reference()
+            .child("Users")
+            .child(firebaseUser.uid)
+            .child("profiles")
+            .push()
+            .set({
+          'status': status.toString(),
+          'profile_pic_url': newimageUrl,
+          'name': name,
+          'gender': gender,
+          'age': age,
+          'phoneNumber': phoneNumber,
+          'message': message,
+          'address': address,
+        });
+        BotToast.showText(
+            contentColor: Colors.greenAccent,
+            text: "LOADING (100%)...",
+            textStyle:
+                GoogleFonts.quicksand(fontSize: 20, color: Colors.white));
+      } catch (e) {
+        BotToast.showText(
+            contentColor: Colors.redAccent,
+            text: "FAILED!",
+            textStyle:
+                GoogleFonts.quicksand(fontSize: 20, color: Colors.white));
+        return null;
+      }
+    });
+    Navigator.pushNamed(context, Bar.id);
+    BotToast.showText(
+        contentColor: Colors.greenAccent,
+        text: "DONE!",
         textStyle: GoogleFonts.quicksand(fontSize: 20, color: Colors.white));
   }
 
@@ -116,6 +194,8 @@ class _EditProfileState extends State<EditProfile> {
     });
   }
 
+  String newimageUrl = '';
+
   Future<String> saveImageOnFirebaseStorage(
       String userName, int age, String imgPath, File file) async {
     var filename = userName + age.toString();
@@ -125,6 +205,7 @@ class _EditProfileState extends State<EditProfile> {
     final StorageUploadTask uploadTask = storageReference.putFile(file);
     final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
     final String url = (await downloadUrl.ref.getDownloadURL());
+    newimageUrl = url;
     print("$url");
     return url;
   }
@@ -264,14 +345,15 @@ class _EditProfileState extends State<EditProfile> {
                       activeBgColor: status == 'Safe'
                           ? Colors.green
                           : status == 'Hospitalized'
-                              ? Colors.red
-                              : status == 'Hospitalized'
+                              ? Colors.redAccent
+                              : status == 'Confirmed Deceased'
                                   ? Colors.red.shade800
                                   : Colors.red.shade800,
                       activeFgColor: Colors.white,
                       inactiveBgColor: Colors.white,
                       inactiveFgColor: Colors.grey.shade600,
-                      labels: ['Hospitalized', 'Safe', 'Confirmed deceased'],
+                      labels: ['Hospitalized', 'Safe', 'Confirmed Deceased'],
+                      fontSize: 12,
                       onToggle: (index) {
                         if (index == 1) {
                           setState(() {
@@ -283,7 +365,7 @@ class _EditProfileState extends State<EditProfile> {
                           });
                         } else if (index == 2) {
                           setState(() {
-                            status = 'Confirmed deceased';
+                            status = 'Confirmed Deceased';
                           });
                         }
                       },
@@ -469,10 +551,11 @@ class _EditProfileState extends State<EditProfile> {
                       }
                       BotToast.showText(
                           contentColor: Colors.greenAccent,
-                          text: "LOADING ...",
+                          text: "LOADING...",
                           textStyle: GoogleFonts.quicksand(
                               fontSize: 20, color: Colors.white));
-                      await _onPressed();
+
+                      // await _onPressedSecond();
                     },
                     child: Text(
                       'SAVE',

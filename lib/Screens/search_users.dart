@@ -3,6 +3,7 @@ import 'package:beirut/Screens/login_screen.dart';
 import 'package:beirut/profile_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -37,24 +38,51 @@ class _SearchUserPageState extends State<SearchUserPage> {
         .toList();
   }
 
-  Future createListofProfiles() async {
+  void getData() async {
+    DatabaseReference ref =
+        FirebaseDatabase.instance.reference().child("User Data");
+    oldList.clear();
+    ref.once().then((DataSnapshot snapshot) {
+      var data = snapshot.value;
+      var keys = snapshot.value.keys;
+      print(keys.toString());
+      for (var key in keys) {
+        oldList.add(ProfileModel(
+          data[key]['name'],
+          data[key]['phoneNumber'],
+          data[key]['status'],
+          data[key]['message'],
+          data[key]['address'],
+          data[key]['gender'],
+          data[key]['age'],
+          data[key]['profile_pic_url'],
+        ));
+      }
+      setState(() {
+        newList = oldList;
+      });
+    });
+  }
+
+  /*Future createListofProfiles() async {
     QuerySnapshot qn =
         await Firestore.instance.collection('User Data').getDocuments();
     var docs = qn.documents;
     for (var Doc in docs) {
-      oldList.add(ProfileModel.fromFireStore(Doc));
+      //oldList.add(ProfileModel.fromFireStore(Doc));
     }
+
     setState(() {
       newList = oldList;
     });
-  }
+  }*/
 
   TextEditingController _text = TextEditingController();
   final _debouncer = Debouncer(milliseconds: 500);
   @override
   @override
   void initState() {
-    createListofProfiles();
+    getData();
     setState(() {
       _filter('');
     });

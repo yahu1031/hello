@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:beirut/Components/Services/auth_services.dart';
 import 'package:beirut/Screens/login_screen.dart';
@@ -14,6 +15,10 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  String userName;
+  String userLocation;
+  String userphoneNumber;
+
   final firestore = Firestore.instance;
   String userEmail;
   final _auth = FirebaseAuth.instance;
@@ -23,9 +28,30 @@ class _ProfilePageState extends State<ProfilePage> {
     print(userEmail);
   }
 
+  bool showText = false, showIndicator = false;
+  void getData() async {
+    getCurrentUserEmail();
+    showIndicator = true;
+    var firebaseUser = await FirebaseAuth.instance.currentUser();
+    DatabaseReference ref = FirebaseDatabase.instance
+        .reference()
+        .child("Users")
+        .child(firebaseUser.uid)
+        .child("settings");
+    ref.once().then((DataSnapshot snapshot) {
+      var data = snapshot.value;
+      setState(() {
+        userName = data['name'];
+        userphoneNumber = data['phoneNumber'];
+        userLocation = data['location'];
+      });
+      showIndicator = false;
+    });
+  }
+
   @override
   void initState() {
-    getCurrentUserEmail();
+    getData();
     super.initState();
   }
 
@@ -77,107 +103,87 @@ class _ProfilePageState extends State<ProfilePage> {
                   if (!result.hasData) {
                     return Text('No data');
                   }
-                  return StreamBuilder<QuerySnapshot>(
-                      stream: Firestore.instance
-                          .collection("Users")
-                          .document(userEmail)
-                          .collection("settings")
-                          .snapshots(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (snapshot.hasError)
-                          return new Text('Error: ${snapshot.error}');
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting:
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          case ConnectionState.none:
-                            return Center(child: Text("NONE"));
-                          case ConnectionState.active:
-                            print(snapshot.data.documents.toString());
-                            return Column(
-                              children: <Widget>[
-                                SizedBox(
-                                  height: 80,
-                                ),
-                                CircleAvatar(
-                                  backgroundColor: Colors.grey.shade300,
-                                  radius: 80,
-                                  child: Image.asset(
-                                    'images/user.png',
-                                    height: 100,
+                  return showIndicator
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            CircularProgressIndicator(),
+                          ],
+                        )
+                      : Column(
+                          children: <Widget>[
+                            SizedBox(
+                              height: 80,
+                            ),
+                            CircleAvatar(
+                              backgroundColor: Colors.grey.shade300,
+                              radius: 80,
+                              child: Image.asset(
+                                'images/user.png',
+                                height: 100,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              userName,
+                              style: GoogleFonts.quicksand(
+                                  fontWeight: FontWeight.bold, fontSize: 30),
+                            ),
+                            Text(
+                              userEmail,
+                              style: GoogleFonts.quicksand(
+                                  fontWeight: FontWeight.w300, fontSize: 20),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              margin: EdgeInsets.all(30),
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.location_on,
+                                    color: Color(0xFF3F51B5),
+                                    size: 20,
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Text(
-                                  snapshot.data.documents[0]['name'],
-                                  style: GoogleFonts.quicksand(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 30),
-                                ),
-                                Text(
-                                  snapshot.data.documents[0]['email'],
-                                  style: GoogleFonts.quicksand(
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: 20),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Container(
-                                  margin: EdgeInsets.all(30),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.location_on,
-                                        color: Color(0xFF3F51B5),
-                                        size: 20,
-                                      ),
-                                      SizedBox(
-                                        width: 20,
-                                      ),
-                                      Text(
-                                        snapshot.data.documents[0]['location'],
-                                        style: GoogleFonts.quicksand(
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 20),
-                                      ),
-                                    ],
+                                  SizedBox(
+                                    width: 20,
                                   ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.all(30),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.phone_android,
-                                        color: Color(0xFF3F51B5),
-                                        size: 30,
-                                      ),
-                                      SizedBox(
-                                        width: 20,
-                                      ),
-                                      Text(
-                                        snapshot.data.documents[0]
-                                            ['phoneNumber'],
-                                        style: GoogleFonts.quicksand(
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 20),
-                                      ),
-                                    ],
+                                  Text(
+                                    userLocation,
+                                    style: GoogleFonts.quicksand(
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: 20),
                                   ),
-                                )
-                              ],
-                            );
-
-                          default:
-                            print(snapshot.data.documents.toString());
-                            return CircularProgressIndicator();
-                        }
-                      });
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.all(30),
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.phone_android,
+                                    color: Color(0xFF3F51B5),
+                                    size: 30,
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Text(
+                                    userphoneNumber,
+                                    style: GoogleFonts.quicksand(
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: 20),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        );
                 }),
           ],
         ),
