@@ -1,4 +1,4 @@
-import 'package:beirut/Screens/profile_page.dart';
+import 'package:beirut/Components/dialogs.dart';
 import 'package:beirut/Screens/testit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,6 +7,7 @@ import 'package:beirut/Components/Widgets/customTextfield.dart';
 import 'package:beirut/constants.dart';
 import 'package:beirut/styles.dart' as style;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
@@ -39,19 +40,29 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   bool _validate = false;
+  void registerUserChecker() async {
+    if ((_emailController == null && _passwordController == null) ||
+        _emailController == null ||
+        _passwordController == null) {
+      Dialogs.yesAbortDialog(context, kSorry, kEmptyCredString);
+    } else if (!_emailController.contains('@')) {
+      Dialogs.yesAbortDialog(context, kSorry, kEmailDomainMissingString);
+    } else if (_passwordController.length < 6) {
+      Dialogs.yesAbortDialog(
+          context, kPasswordTooShortString, kPasswordTooShortExplainString);
+    } else {
+      registerUser();
+    }
+  }
 
   void registerUser() async {
-    setState(() {
-      showProgressBar = true;
-    });
     try {
       final newUser = await _auth.createUserWithEmailAndPassword(
           email: _emailController.trim(), password: _passwordController.trim());
       if (newUser != null) {
         registerUserDetails();
-
         Firestore.instance
-            .collection('User')
+            .collection('User Data')
             .document(newUser.user.uid)
             .setData({
           'name': FieldValue.arrayUnion([]),
@@ -66,8 +77,12 @@ class _SignupScreenState extends State<SignupScreen> {
           showProgressBar = false;
         });
       }
-    } catch (e) {
-      print(e);
+    } catch (signUpError) {
+      if (signUpError is PlatformException) {
+        if (signUpError.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
+          Dialogs.yesAbortDialog(context, 'Error', 'Email already exists !');
+        }
+      }
     }
   }
 
@@ -84,10 +99,12 @@ class _SignupScreenState extends State<SignupScreen> {
     });
   }
 
+  bool validatePassword = false;
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormState> _signupKey = GlobalKey<FormState>();
-    bool validatePassword = false;
+
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus.unfocus();
@@ -189,16 +206,17 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ),
                                   child: FlatButton(
                                     onPressed: () {
-                                      if (_passwordController.length > 7) {
-                                        setState(() {
-                                          validatePassword = true;
-                                        });
-                                      } else if (!emailValidator(
-                                          _emailController)) {
-                                        _emailController = "Invalid email";
-                                      } else {
-                                        registerUser();
-                                      }
+                                      // if (_passwordController.length > 7) {
+                                      //   setState(() {
+                                      //     validatePassword = true;
+                                      //   });
+                                      // } else if (!emailValidator(
+                                      //     _emailController)) {
+                                      //   _emailController = "Invalid email";
+                                      // } else {
+                                      //   registerUser();
+                                      // }
+                                      registerUserChecker();
                                     },
                                     child: Center(
                                       child: FittedBox(
@@ -246,9 +264,6 @@ class _SignupScreenState extends State<SignupScreen> {
                               ],
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 50,
                         ),
                       ],
                     ),

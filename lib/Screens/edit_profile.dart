@@ -51,25 +51,36 @@ class _EditProfileState extends State<EditProfile> {
         .currentUser()
         .then((value) => userEmail = value.email)
         .then((_) async {
-      fireStoreInstance
-          .collection("Users")
-          .document(userEmail)
-          .collection("profiles")
-          .add({
-        'status': status.toString(),
-        'profile_pic_url': await saveImageOnFirebaseStorage(
-            name, age, profileImg.path, profileImg),
-        'name': name,
-        'gender': gender,
-        'age': age,
-        'phoneNumber': phoneNumber,
-        'message': message,
-        'address': address,
-      });
-      BotToast.showText(
-          contentColor: Colors.greenAccent,
-          text: "LOADING ...",
-          textStyle: GoogleFonts.quicksand(fontSize: 20, color: Colors.white));
+      try {
+        fireStoreInstance
+            .collection("Users")
+            .document(userEmail)
+            .collection("profiles")
+            .add({
+          'status': status.toString(),
+          'profile_pic_url': await saveImageOnFirebaseStorage(
+              name, age, profileImg.path, profileImg),
+          'name': name,
+          'gender': gender,
+          'age': age,
+          'phoneNumber': phoneNumber,
+          'message': message,
+          'address': address,
+        });
+      } catch (e) {
+        BotToast.showText(
+            contentColor: Colors.redAccent,
+            text: "FAILED!",
+            textStyle:
+                GoogleFonts.quicksand(fontSize: 20, color: Colors.white));
+        return null;
+      }
+    });
+    BotToast.showText(
+        contentColor: Colors.greenAccent,
+        text: "LOADING ...",
+        textStyle: GoogleFonts.quicksand(fontSize: 20, color: Colors.white));
+    try {
       fireStoreInstance.collection("User Data").add({
         'status': status.toString(),
         'profile_pic_url': await saveImageOnFirebaseStorage(
@@ -81,15 +92,20 @@ class _EditProfileState extends State<EditProfile> {
         'message': message,
         'address': address,
         'quardianName': guardianName,
-      }).then((_) {
-        Navigator.pushNamed(context, Bar.id);
-        BotToast.showText(
-            contentColor: Colors.grey,
-            text: "DONE !",
-            textStyle:
-                GoogleFonts.quicksand(fontSize: 20, color: Colors.white));
       });
-    });
+    } catch (e) {
+      BotToast.showText(
+          contentColor: Colors.redAccent,
+          text: "FAILED!",
+          textStyle: GoogleFonts.quicksand(fontSize: 20, color: Colors.white));
+
+      return null;
+    }
+    Navigator.pushNamed(context, Bar.id);
+    BotToast.showText(
+        contentColor: Colors.grey,
+        text: "DONE",
+        textStyle: GoogleFonts.quicksand(fontSize: 20, color: Colors.white));
   }
 
   Future getImage() async {
@@ -244,22 +260,18 @@ class _EditProfileState extends State<EditProfile> {
                       cornerRadius: 50,
                       initialLabelIndex: status == 'Safe'
                           ? 1
-                          : status == 'In hospital' ? 0 : 2,
+                          : status == 'Hospitalized' ? 0 : 2,
                       activeBgColor: status == 'Safe'
                           ? Colors.green
-                          : status == 'In hospital'
+                          : status == 'Hospitalized'
                               ? Colors.red
-                              : status == 'In hospital'
+                              : status == 'Hospitalized'
                                   ? Colors.red.shade800
                                   : Colors.red.shade800,
                       activeFgColor: Colors.white,
                       inactiveBgColor: Colors.white,
                       inactiveFgColor: Colors.grey.shade600,
-                      labels: [
-                        'In hospital',
-                        'Safe',
-                        'Injured/confirmed deseased'
-                      ],
+                      labels: ['Hospitalized', 'Safe', 'Confirmed deceased'],
                       onToggle: (index) {
                         if (index == 1) {
                           setState(() {
@@ -267,11 +279,11 @@ class _EditProfileState extends State<EditProfile> {
                           });
                         } else if (index == 0) {
                           setState(() {
-                            status = 'In hospital';
+                            status = 'Hospitalized';
                           });
                         } else if (index == 2) {
                           setState(() {
-                            status = 'Injured/confirmed deseased';
+                            status = 'Confirmed deceased';
                           });
                         }
                       },

@@ -1,35 +1,42 @@
 {
   "project_info": {
-    "project_number": "180673238777",
-    "firebase_url": "https://beirut-app-b9665.firebaseio.com",
-    "project_id": "beirut-app-b9665",
-    "storage_bucket": "beirut-app-b9665.appspot.com"
+    "project_number": "171183800906",
+    "firebase_url": "https://beirut-tracking-app-4380f.firebaseio.com",
+    "project_id": "beirut-tracking-app-4380f",
+    "storage_bucket": "beirut-tracking-app-4380f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:180673238777:android:b1de8a8d389c02b4e47428",
+        "mobilesdk_app_id": "1:171183800906:android:c2c60502292e4195aa5cb3",
         "android_client_info": {
           "package_name": "com.tracking.beirut"
         }
       },
       "oauth_client": [
         {
-          "client_id": "180673238777-51c2n2p3fcgkofhlihcfo4hp4aekm4sg.apps.googleusercontent.com",
+          "client_id": "171183800906-d3gj7kert1vo945ip2cipgrfupkj7o14.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBATh22SR6xXM9JST6ypTYwEIiTp7dhdZo"
+          "current_key": "AIzaSyBVkA_MkciMisom5fdf1ZvnIT6iw-BP5X4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "180673238777-51c2n2p3fcgkofhlihcfo4hp4aekm4sg.apps.googleusercontent.com",
+              "client_id": "171183800906-d3gj7kert1vo945ip2cipgrfupkj7o14.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "171183800906-8ffhhputmlrk0a7ra3btjtpe3kdk6f5a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mayabridgman-BeirutTrackingApp"
+              }
             }
           ]
         }
