@@ -347,13 +347,13 @@ class _EditProfileState extends State<EditProfile> {
                           ? Colors.green
                           : status == 'Hospitalized'
                               ? Colors.redAccent
-                              : status == 'Confirmed Deceased'
+                              : status == 'Deceased'
                                   ? Colors.red.shade800
                                   : Colors.red.shade800,
                       activeFgColor: Colors.white,
                       inactiveBgColor: Colors.white,
                       inactiveFgColor: Colors.grey.shade600,
-                      labels: ['Hospitalized', 'Safe', 'Confirmed Deceased'],
+                      labels: ['Hospitalized', 'Safe', 'Deceased'],
                       fontSize: 12,
                       onToggle: (index) {
                         if (index == 1) {
@@ -366,7 +366,7 @@ class _EditProfileState extends State<EditProfile> {
                           });
                         } else if (index == 2) {
                           setState(() {
-                            status = 'Confirmed Deceased';
+                            status = 'Deceased';
                           });
                         }
                       },
