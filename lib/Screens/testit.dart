@@ -6,7 +6,6 @@ import 'package:beirut/Screens/profile.dart';
 import 'package:beirut/Screens/profile_page.dart';
 import 'package:beirut/Screens/search_users.dart';
 import 'package:circular_reveal_animation/circular_reveal_animation.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -106,7 +105,7 @@ class _BarState extends State<Bar> with SingleTickerProviderStateMixin {
 }
 
 class NavigationScreen extends StatefulWidget {
-  Widget _child;
+  final Widget _child;
 
   NavigationScreen(this._child) : super();
 

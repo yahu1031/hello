@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class ProfileModel {
   String name;
   String phoneNumber;

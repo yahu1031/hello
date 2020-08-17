@@ -2,7 +2,6 @@ import 'package:beirut/Components/dialogs.dart';
 import 'package:beirut/Screens/testit.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:beirut/Components/Responsive/size_config.dart';
 import 'package:beirut/Components/Widgets/customTextfield.dart';
 import 'package:beirut/constants.dart';
@@ -25,7 +24,6 @@ class _SignupScreenState extends State<SignupScreen> {
   String _locationController;
   String _phoneController;
   String _passwordController;
-  final _firestore = Firestore.instance;
 
   final _auth = FirebaseAuth.instance;
   bool showProgressBar = false;

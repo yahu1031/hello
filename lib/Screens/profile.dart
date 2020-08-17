@@ -1,10 +1,8 @@
 import 'package:beirut/ProfileMode.dart';
-import 'package:beirut/Screens/testit.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -39,8 +37,9 @@ class _ProfileState extends State<Profile> {
       await FirebaseDatabase.instance
           .reference()
           .child('User Data')
-          .orderByChild('name')
-          .equalTo(dataList[index].name)
+          .orderByChild('id')
+          .equalTo(
+              '${dataList[index].name}-${dataList[index].age}-${dataList[index].gender}-${dataList[index].message}')
           .once()
           .then((DataSnapshot snapshot) {
         Map<dynamic, dynamic> children = snapshot.value;
@@ -60,13 +59,14 @@ class _ProfileState extends State<Profile> {
     }
     var firebaseUser = await FirebaseAuth.instance.currentUser();
     try {
-      await FirebaseDatabase.instance
+      FirebaseDatabase.instance
           .reference()
           .child("Users")
           .child(firebaseUser.uid)
           .child("profiles")
-          .orderByChild('name')
-          .equalTo(dataList[index].name)
+          .orderByChild('id')
+          .equalTo(
+              '${dataList[index].name}-${dataList[index].age}-${dataList[index].gender}-${dataList[index].message}')
           .onChildAdded
           .listen((Event event) async {
         await FirebaseDatabase.instance
@@ -96,8 +96,7 @@ class _ProfileState extends State<Profile> {
   final _auth = FirebaseAuth.instance;
   String userEmail;
   void getCurrentUserEmail() async {
-    final user =
-        await _auth.currentUser().then((value) => userEmail = value.email);
+    await _auth.currentUser().then((value) => userEmail = value.email);
     print(userEmail);
   }
 
@@ -154,9 +153,6 @@ class _ProfileState extends State<Profile> {
   }*/
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

@@ -1,6 +1,5 @@
 import 'package:beirut/Components/Responsive/size_config.dart';
 import 'package:beirut/Components/Services/auth_services.dart';
-import 'package:beirut/Components/Services/user.dart';
 import 'package:beirut/Components/Widgets/customTextfield.dart';
 import 'package:beirut/Components/dialogs.dart';
 import 'package:beirut/Components/dialogs.dart' as dialogs;
@@ -27,7 +26,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     void forgotPassword() async {
       if (formKey.currentState.validate()) {
         dialogs.showLoadingDialog(context);
-        final User user = await _auth.resetPassword(_email.trim());
+        await _auth.resetPassword(_email.trim());
         Navigator.pop(context, true);
         if (_email == null) {
           Dialogs.yesAbortDialog(context, kSorry, kEmptyCredString);

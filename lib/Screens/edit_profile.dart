@@ -36,8 +36,7 @@ class _EditProfileState extends State<EditProfile> {
 
   String userEmail = "";
   void getCurrentUserEmail() async {
-    final user =
-        await _auth.currentUser().then((value) => userEmail = value.email);
+    await _auth.currentUser().then((value) => userEmail = value.email);
   }
 
   void getCurrentData() async {
@@ -132,6 +131,7 @@ class _EditProfileState extends State<EditProfile> {
         'phoneNumber': phoneNumber,
         'message': message,
         'address': address,
+        'id': '$name-$age-$gender-$message',
       });
       BotToast.showText(
           contentColor: Colors.greenAccent,
@@ -164,6 +164,7 @@ class _EditProfileState extends State<EditProfile> {
           'phoneNumber': phoneNumber,
           'message': message,
           'address': address,
+          'id': '$name-$age-$gender-$message',
         });
         BotToast.showText(
             contentColor: Colors.greenAccent,
@@ -200,7 +201,7 @@ class _EditProfileState extends State<EditProfile> {
       String userName, int age, String imgPath, File file) async {
     var filename = userName + age.toString();
     storageReference =
-        await FirebaseStorage.instance.ref().child("images/$filename.png");
+        FirebaseStorage.instance.ref().child("images/$filename.png");
 
     final StorageUploadTask uploadTask = storageReference.putFile(file);
     final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
@@ -555,7 +556,7 @@ class _EditProfileState extends State<EditProfile> {
                           textStyle: GoogleFonts.quicksand(
                               fontSize: 20, color: Colors.white));
 
-                      // await _onPressedSecond();
+                      await _onPressedSecond();
                     },
                     child: Text(
                       'SAVE',

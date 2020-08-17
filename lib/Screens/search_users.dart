@@ -77,7 +77,6 @@ class _SearchUserPageState extends State<SearchUserPage> {
     });
   }*/
 
-  TextEditingController _text = TextEditingController();
   final _debouncer = Debouncer(milliseconds: 500);
   @override
   @override

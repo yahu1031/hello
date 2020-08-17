@@ -23,8 +23,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String userEmail;
   final _auth = FirebaseAuth.instance;
   void getCurrentUserEmail() async {
-    final user =
-        await _auth.currentUser().then((value) => userEmail = value.email);
+    await _auth.currentUser().then((value) => userEmail = value.email);
     print(userEmail);
   }
 
