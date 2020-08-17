@@ -15,6 +15,8 @@ jobs:
       image:  google/dart:latest
 
     steps:
+    - name: cleaning cache
+      run: flutter clean
     - uses: actions/checkout@v2
     - name: Install dependencies
       run: flutter pub get
