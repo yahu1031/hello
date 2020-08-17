@@ -66,6 +66,7 @@ class CustomTextField extends StatelessWidget {
                 : onDigit ? TextInputType.number : TextInputType.emailAddress,
             inputFormatters: <TextInputFormatter>[
               onDigit
+                  // ignore: deprecated_member_use
                   ? WhitelistingTextInputFormatter.digitsOnly
                   // ignore: deprecated_member_use
                   : BlacklistingTextInputFormatter.singleLineFormatter,
